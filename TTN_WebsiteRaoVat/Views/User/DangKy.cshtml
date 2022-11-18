@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "DangKy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- sign up form -->
+<section>
+    <div id="agileits-sign-in-page" class="sign-in-wrapper">
+        <div class="agileinfo_signin">
+            <h3>Đăng ký</h3>
+            @using (Html.BeginForm("DangKy", "User"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+                <div class="LoaiTaiKhoan">
+                    <label style="margin:5px 66px">Chọn loại tài khoản</label>
+                    <select class="selectpicker show-tick" name="LoaiTK" required>
+                        <option value="0">Cá nhân</option>
+                        <option value="1">Bán chuyên</option>
+                    </select>
+                </div>
+                <input type="text" name="HoTen" placeholder="Họ và tên" required="">
+                <input type="tel" name="SDT" placeholder="Số điện thoại" required="">
+                <input type="email" name="Email" placeholder="Email" required="">
+                <input type="password" name="MatKhau" placeholder="Mật khẩu" required="">
+                <input type="password" name="MatKhau" placeholder="Nhập lại mật khẩu" required="">
+                <div class="signin-rit">
+                    <span class="agree-checkbox">
+                        <label class="checkbox"><input type="checkbox" name="checkbox">Tôi đồng ý với <a class="w3layouts-t" href="terms.html" target="_blank">Điều khoản sử dụng</a> và <a class="w3layouts-t" href="privacy.html" target="_blank">Chính sách bảo mật</a></label>
+                    </span>
+                </div>
+                <input type="submit" value="Đăng ký">
+            }
+        </div>
+    </div>
+</section>
+<!-- //sign up form -->

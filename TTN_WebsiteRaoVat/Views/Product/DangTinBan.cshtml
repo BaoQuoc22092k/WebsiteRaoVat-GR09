@@ -1,0 +1,102 @@
+﻿@using TTN_WebsiteRaoVat.Models;
+@model TTN_WebsiteRaoVat.Controllers.ImageFile
+@{
+    ViewBag.Title = "DangTinBan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    VatPhamAccess vpa = new VatPhamAccess();
+}
+
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs"><a href="/Home"><i class="fa fa-home home_1"></i></a> / <span>Đăng quảng cáo</span></span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- Submit Ad -->
+<div class="submit-ad main-grid-border">
+    <div class="container">
+        <h2 class="w3-head">Tải lên mặt hàng của bạn</h2>
+        <div class="post-ad-form">
+            @using (Html.BeginForm("DangTinBan", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <label>Chọn danh mục <span>*</span></label>
+                <select class="" name="TheLoai" required>
+                    @{
+                        List<DanhMuc> temp = vpa.LayDanhMuc();
+                        foreach (DanhMuc item in temp)
+                        {
+                            <option value="@item.MaDanhMuc">@item.TenDanhMuc</option>
+                        }
+                    }
+
+                </select>
+                <div class="clearfix"></div>
+                <label>Tiêu đề: <span>*</span></label>
+                <input type="text" class="phone" placeholder="" name="TieuDe" required>
+                <div class="clearfix"></div>
+                <label>Mô tả: <span>*</span></label>
+                <textarea class="mess" placeholder="Thôn tin sản phẩm." name="MoTa" required></textarea>
+                <div class="clearfix"></div>
+                <label>Tình trạng: <span>*</span></label>
+                <input type="text" class="phone" placeholder="" name="TinhTrang" required>
+                <div class="clearfix"></div>
+                <label>Giá tiền: <span>*</span></label>
+                <input type="text" class="GiaTien" placeholder="" name="GiaTien" required>
+                <div class="clearfix"></div>
+                <div class="upload-ad-photos">
+                    <label>Tải ảnh lên : <br> (Ít nhất 1 ảnh)</label>
+                    <div class="photos-upload-view">
+                        <div>
+                            <input type="file" id="files" name="files" onchange="loadFile(event)" multiple accept="image/jpeg,image/png" required />
+                        </div>
+                        <div>
+                            <div id="AnhNguoiDungDang">
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        var loadFile = function (event) {
+                            var files = event.target.files;
+                            for (var i = 0; i < files.length; i++) {
+                                $("#AnhNguoiDungDang").append("<img src='" + URL.createObjectURL(event.target.files[i]) + "'class='AnhDemo' />");
+                            }
+                        }
+                    </script>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="personal-details">
+                    <form>
+                        <label>Tên của bạn: <span>*</span></label>
+                        <input type="text" class="name" placeholder="" name="HoTen" required>
+                        <div class="clearfix"></div>
+                        <div class="clearfix"></div>
+                        <label>Tỉnh / Thành phố: <span>*</span></label>
+
+                        <select class="" name="ThanhPho" required>
+                            @{
+                                List<TinhThanh> dsTinhThanh = vpa.LayTinhThanh();
+                                foreach (TinhThanh item in dsTinhThanh)
+                                {
+                                    <option value="@item.MaTinhThanh">@item.TenTinhThanh</option>
+                                }
+                            }
+                        </select>
+                        <div class="clearfix"></div>
+                        <label>Quận / Huyện / Thị Xã: <span>*</span></label>
+                        <input type="text" class="email" placeholder="" name="QuanHuyen" required>
+                        <label>Email: <span>*</span></label>
+                        <input type="text" class="email" placeholder="" name="Email">
+                        <div class="clearfix"></div>
+                        <p class="post-terms">Click vào nút<strong> Tải lên</strong> nghĩa là bạn chấp nhận <a href="/DieuKhoanSuDung" target="_blank">Các điều khoản </a> và <a href="/ChinhSachBaoMat" target="_blank">Chính sách bảo mật</a> của chúng tôi.</p>
+                        <input type="submit" value="Tải lên">
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- // Submit Ad -->

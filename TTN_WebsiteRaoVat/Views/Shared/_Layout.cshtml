@@ -1,0 +1,367 @@
+﻿@using TTN_WebsiteRaoVat.Common;
+@using TTN_WebsiteRaoVat.Models;
+@{
+    VatPhamAccess vpa = new VatPhamAccess();
+    TaiKhoanAccess tka = new TaiKhoanAccess();
+    List<DanhMuc> LDM = vpa.LayDanhMuc();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rao Vặt Nhóm 09</title>
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css"><!-- bootstrap-CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap-select.css"><!-- bootstrap-select-CSS -->
+    <link href="/Content/css/style.css" rel="stylesheet" type="text/css" media="all" /><!-- style.css -->
+    <link rel="stylesheet" type="text/css" href="/Content/css/jquery-ui1.css">
+    <link rel="stylesheet" href="/Content/css/flexslider.css" type="text/css" media="screen" /><!-- flexslider-CSS -->
+    <link rel="stylesheet" href="/Content/css/font-awesome.min.css" /><!-- fontawesome-CSS -->
+    <link rel="stylesheet" href="/Content/css/menu_sideslide.css" type="text/css" media="all"><!-- Navigation-CSS -->
+    <!-- meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //meta tags -->
+    <!--fonts-->
+    <link href='//fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <!--//fonts-->
+    <!-- js -->
+    <script type="text/javascript" src="/Content/js/jquery.min.js"></script>
+    <!-- js -->
+    @RenderSection("HeadJS",required:false)
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="agiletopbar">
+        <div class="wthreenavigation">
+            <div class="menu-wrap">
+                <nav class="menu">
+                    <div class="icon-list">
+                        @foreach(DanhMuc i in LDM)
+                        {
+                            <a href="@Url.Action("Index", "Product", new { MaDM = i.MaDanhMuc, Trang = 1})"><i class="@i.Icon"></i><span>@i.TenDanhMuc</span></a>
+                        }                                          
+                    </div>
+                </nav>
+                <button class="close-button" id="close-button">Tắt menu</button>
+            </div>
+            <button class="menu-button" id="open-button"> </button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- //Navigation -->
+    <!-- header -->
+    <header>
+        <div class="w3ls-header">
+            <!--header-one-->
+            <div class="w3ls-header-right">
+                <ul>
+                    @{
+                        var session = (UserLogin)Session[TTN_WebsiteRaoVat.Common.CommonConstants.USER_SESSION];
+                    }
+                    @if (session == null)
+                    {
+                        <li class="dropdown head-dpdn">
+                            <a href="/DangNhap" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Đăng Nhập </a>
+                        </li>
+                        <li class="dropdown head-dpdn">
+                            <a href="/DangKy" aria-expanded="false"><i class="fa fa-user-plus" aria-hidden="true"></i> Đăng ký </a>
+                        </li>
+                    }
+                    else
+                    {
+
+                        <li class="dropdown head-dpdn">
+                            <a href="/TrangCaNhan/@session.SDT" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Xin chào: @session.SDT </a>
+                        </li>
+                        List<ThongBao> ltb = tka.GetThongBao(session.SDT);
+                        <li class="dropdown head-dpdn">
+                            <a class="DS Chuong" aria-expanded="false"><span class="SLTB">@ltb.Count</span><i class="fa fa-bell" aria-hidden="true"></i> Thông báo </a>
+                            <div class="ThongBao">
+                                <ul class="list-group">
+
+                                    @foreach (ThongBao i in ltb)
+                                    {
+                                        <a href="@i.Link"><li class="list-group-item DSTB"><img src="/Content/uploads/@i.HinhAnh"> @i.NoiDung</li></a>
+                                    }
+                                    <a href="#"><li class="list-group-item DSTB"> <h4> Tất cả thông báo </h4></li></a>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="dropdown head-dpdn">
+                            <a class="DS MuiTenXuong"><i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                            <div class="danhsach MuiTen">
+                                <ul class="list-group">
+                                    <a href="@Url.Action("DanhSachThich", "User", new { sdt = session.SDT.Trim()})"><li class="list-group-item"><i class="fa fa-heart"></i> Tin đã thích</li></a>
+                                    <a href="/DangXuat"><li class="list-group-item"><i class="fa fa-sign-out "></i> Đăng xuất</li></a>
+                                </ul>
+                            </div>
+                        </li>
+                    }
+
+                    <li class="dropdown head-dpdn">
+                        <a href="/TroGiup"><i class="fa fa-question-circle" aria-hidden="true"></i> Trợ giúp</a>
+                    </li>
+                    <li class="dropdown head-dpdn">
+                        <div class="header-right">
+                            <!-- Large modal -->
+                            <div class="agile-its-selectregion">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    <i class="fa fa-globe" aria-hidden="true"></i>Thành phố
+                                </button>
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    Chọn thành phố của bạn
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="form-horizontal" action="#" method="get">
+                                                    <div class="form-group">
+                                                        <select id="basic2" class="show-tick form-control" multiple>
+                                                            <optgroup label="Các tỉnh/thành lớn">
+                                                                @{
+                                                                    List<TinhThanh> dsTinhThanh = vpa.LayTinhThanh();
+                                                                    foreach (TinhThanh item in dsTinhThanh)
+                                                                    {
+                                                                        <option value="@item.MaTinhThanh">@item.TenTinhThanh</option>
+                                                                    }
+                                                                }
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+        <div class="container">
+            <div class="agile-its-header">
+                <div class="logo">
+                    <h1><a href="/Home"><span>TH</span>Market</a></h1>
+                </div>
+                <div class="agileits_search">
+                    @using (Html.BeginForm("TimKiem", "Product"))
+                    {                       
+                            <input name="strTimKiem" type="text" placeholder="Tìm kiếm của bạn?" required="" />
+                            <select id="agileinfo_search" name="TheLoai" required="">
+                                <option value="0">Tất cả danh mục</option>
+                                @{
+                                    List<DanhMuc> temp = vpa.LayDanhMuc();
+                                    foreach (DanhMuc item in temp)
+                                    {
+                                        <option value="@item.MaDanhMuc">@item.TenDanhMuc</option>
+                                    }
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-default" aria-label="Left Align">
+                                <i class="fa fa-search" aria-hidden="true"> </i>
+                            </button>                     
+                    }
+
+                    @if (session == null)
+                    {
+                        <a id="DangTin" class="post-w3layouts-ad" href="#">Đăng tin miễn phí</a>
+                        <script>
+                            $("#DangTin").click(function () {
+                                alert("Bạn phải đăng nhập để thực hiện chức năng này!");
+                            });
+                        </script>
+                    }
+                    else
+                    {
+                        <a class="post-w3layouts-ad" href="/DangTinBan/@session.SDT">Đăng tin miễn phí</a>
+                    }
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </header>
+    <!-- //header -->
+
+    @RenderBody()
+
+    <!--footer section start-->
+    <footer>
+        <div class="w3-agileits-footer-top">
+            <div class="container">
+                <div class="wthree-foo-grids">
+                    <div class="col-md-3 wthree-footer-grid">
+                        <h4 class="footer-head">Chúng tôi là ai?</h4>
+                        <p>
+                            “Nếu các người thành tâm muôn biết,thì chúng tôi sẵn lòng trả lời.
+                            Để đề phòng thế giới bị phá hoại, để bảo vệ nền hòa bình thế giới.
+                            Chúng tôi đại diện cho những nhân vật phản diện, đầy khả ái và ngây ngất lòng người.”
+                            <br />Bùi Trung Tú - HaChiKo
+                        </p>
+                    </div>
+                    <div class="col-md-3 wthree-footer-grid">
+                        <h4 class="footer-head">Trợ giúp</h4>
+                        <ul>
+                            <li><a href="/CachHoatDong"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Cách hoạt động</a></li>
+                            <li><a href="/PhanHoi"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Phản hồi</a></li>
+                            <li><a href="/LienHe"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 wthree-footer-grid">
+                        <h4 class="footer-head">Thông tin</h4>
+                        <ul>
+                            <li><a href="/DieuKhoanSuDung"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Điều khoản sử dụng</a></li>
+                            <li><a href="/ChinhSachBaoMat"><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Chính sách bảo mật</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 wthree-footer-grid">
+                        <h4 class="footer-head">Liên hệ trực tiếp</h4>
+                        <span class="hq">8:00 Sáng - 17:30 Chiều</span>
+                        <address>
+                            <ul class="location">
+                                <li><span class="glyphicon glyphicon-map-marker"></span></li>
+                                <li>234 - Hoàng Quốc Việt</li>
+                            </ul>
+                            <div class="clearfix"> </div>
+                            <ul class="location">
+                                <li><span class="glyphicon glyphicon-earphone"></span></li>
+                                <li>+84 113</li>
+                            </ul>
+                            <div class="clearfix"> </div>
+                            <ul class="location">
+                                <li><span class="glyphicon glyphicon-envelope"></span></li>
+                                <li><a href="#">hachiko07021999@gmail.com</a></li>
+                            </ul>
+                        </address>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="agileits-footer-bottom text-center">
+            <div class="container">
+                <div class="w3-footer-logo">
+                    <h1><a href="/Home"><span>TH</span>Market</a></h1>
+                </div>
+                <div class="w3-footer-social-icons">
+                    <ul>
+                        <li><a class="facebook" href="#"><i class="fa fa-facebook" aria-hidden="true"></i><span>Facebook</span></a></li>
+                        <li><a class="twitter" href="#"><i class="fa fa-twitter" aria-hidden="true"></i><span>Twitter</span></a></li>
+                        <li><a class="googleplus" href="#"><i class="fa fa-google-plus" aria-hidden="true"></i><span>Google+</span></a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Hết html -->
+    <!--footer section end-->
+    <!-- Navigation-Js-->
+    <script type="text/javascript" src="/Content/js/main.js"></script>
+    <script type="text/javascript" src="/Content/js/classie.js"></script>
+    <!-- //Navigation-Js-->
+    <!-- jQuery (cần thiết cho các plugin JavaScript của Bootstrap) -->
+    <script src="/Content/js/bootstrap.js"></script>
+    <script src="/Content/js/bootstrap-select.js"></script>
+    <script>
+        $(document).ready(function () {
+            var mySelect = $('#first-disabled2');
+
+            $('#special').on('click', function () {
+                mySelect.find('option:selected').prop('disabled', true);
+                mySelect.selectpicker('refresh');
+            });
+
+            $('#special2').on('click', function () {
+                mySelect.find('option:disabled').prop('disabled', false);
+                mySelect.selectpicker('refresh');
+            });
+
+            $('#basic2').selectpicker({
+                liveSearch: true,
+                maxOptions: 1
+            });
+        });
+    </script>
+    <script type="text/javascript" src="/Content/js/jquery.flexisel.js"></script><!-- flexisel-js -->
+    <script type="text/javascript">
+        $(window).load(function () {
+            $("#flexiselDemo3").flexisel({
+                visibleItems: 1,
+                animationSpeed: 1000,
+                autoPlay: true,
+                autoPlaySpeed: 5000,
+                pauseOnHover: true,
+                enableResponsiveBreakpoints: true,
+                responsiveBreakpoints: {
+                    portrait: {
+                        changePoint: 480,
+                        visibleItems: 1
+                    },
+                    landscape: {
+                        changePoint: 640,
+                        visibleItems: 1
+                    },
+                    tablet: {
+                        changePoint: 768,
+                        visibleItems: 1
+                    }
+                }
+            });
+
+        });
+    </script>
+    <!-- Slider-JavaScript -->
+    <script src="/Content/js/responsiveslides.min.js"></script>
+    <script>
+        $(function () {
+            $("#slider").responsiveSlides({
+                auto: true,
+                pager: false,
+                nav: true,
+                speed: 500,
+                maxwidth: 800,
+                namespace: "large-btns"
+            });
+
+        });
+    </script>
+    <!-- //Slider-JavaScript -->
+    <!-- Navigation-JavaScript -->
+    <script src="/Content/js/classie.js"></script>
+    <script src="/Content/js/main.js"></script>
+    <!-- //Navigation-JavaScript -->
+    <!-- here stars scrolling icon -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $().UItoTop({ easingType: 'easeOutQuart' });
+
+        });
+    </script>
+    <!-- start-smoth-scrolling -->
+    <script type="text/javascript" src="/Content/js/move-top.js"></script>
+    <script type="text/javascript" src="/Content/js/easing.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+            });
+        });
+    </script>
+    <!-- start-smoth-scrolling -->
+    <!-- //here ends scrolling icon -->
+    <script type="text/javascript" src="/Content/js/btt.js"></script>
+</body>
+</html>

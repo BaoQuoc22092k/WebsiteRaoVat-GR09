@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "ThayDoiThongTinCaNhan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TTN_WebsiteRaoVat.Models.TaiKhoan
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs">
+            <a href="/Home"><i class="fa fa-home home_1"></i></a> /
+            <a href="/TrangCaNhan/@Model.SDT">Trang cá nhân</i></a> /
+            <span>Chỉnh sửa thông tin</span>
+        </span>
+    </div>
+</div>
+<div class="submit-ad main-grid-border">
+    <div class="container">
+        <form>
+            <div class="VienBao col-md-3">
+                <div class="AnhDaiDien">                   
+                    <img id="AnhDaiDien" src="/Content/images/@Model.AnhDaiDien" alt="" />
+                </div>
+                <div class="photos-upload-view">
+                    <div>
+                        <input type="file" id="fileUpload" data-sdt="@Model.SDT" name="fileUpload" style="display:none;" accept="image/*" />
+                        <input type="button" id="btnUpload" value="..." class="btn btn-success" /> 
+                    </div>
+                    <script>
+                        $(function () {
+                            $('#btnUpload').click(function () {
+                                $('#fileUpload').trigger('click');
+                            });
+                            $('#fileUpload').change(function () {
+                                var SDT = $(this).data('sdt');
+                                if (window.FormData !== undefined) {
+                                    var fileUpload = $('#fileUpload').get(0);
+                                    var files = fileUpload.files;
+                                    var formData = new FormData();
+                                    formData.append('file', files[0]);
+                                    formData.append('SDT', SDT);                                      
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/User/ThayDoiAnhDaiDien',
+                                        contentType: false,
+                                        processData: false,
+                                        data: formData,
+                                        success: function (urlImage) {
+                                            $('#AnhDaiDien').attr('src','/Content/images/' + urlImage);
+                                        },
+                                        error: function (err) {
+                                            alert('Loi upload: '+err.statusText);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                    </script>
+                </div>
+            </div>
+        </form>
+        <div class="Trai col-md-9">
+            <div class="post-ad-form">
+                @using (Html.BeginForm("ThayDoiThongTinCaNhan", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <label>Họ và tên: </label>
+                    <input type="text" class="phone" name="HoTen" value="@Model.HoTen">
+                    <div class="clearfix"></div>
+                    <div class="clearfix"></div>
+                    <label>Email: </label>
+                    <input type="text" class="phone" name="Email" value="@Model.Email">
+                    <div class="clearfix"></div>
+                    <label>Địa chỉ: </label>
+                    <input type="text" class="phone" name="QueQuan" value="@Model.QueQuan">
+                    <div class="clearfix"></div>
+                    <label>Giới tính: </label>
+                    <input type="text" class="phone" name="GioiTinh" value="@Model.GioiTinh">
+                    <div class="clearfix"></div>
+                    <label>Ngày sinh: </label>
+                    if(Model.NgaySinh.ToString("dd/MM/yyyy") == "01/01/0001")
+                    {
+                        <input type="text" class="phone" name="tempNgaySinh" value="Chưa có">
+                    }
+                    else
+                    {
+                        <input type="text" class="phone" name="tempNgaySinh" value="@Model.NgaySinh.ToString("dd/MM/yyyy")">
+                    }
+                    <div class="clearfix"></div>
+                    <input type="submit" value="Lưu thay đổi">
+                    <div class="clearfix"></div>
+                }
+            </div>
+        </div>       
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+

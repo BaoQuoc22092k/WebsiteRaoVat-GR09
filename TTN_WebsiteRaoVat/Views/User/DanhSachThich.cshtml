@@ -1,0 +1,72 @@
+﻿@using TTN_WebsiteRaoVat.Models;
+@{
+    ViewBag.Title = "DanhSachThich";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<TTN_WebsiteRaoVat.Models.VatPham>
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs">
+            <a href="/Home"><i class="fa fa-home home_1"></i></a> /
+            <span>Tin đã thích</span>
+        </span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="container">
+    <div class="agileinfo-ads-display">
+        <div class="wrapper">
+            <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+                <ul id="myTab" class="nav nav-tabs nav-tabs-responsive" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                            <span class="text">Tin bạn đã thích:</span>
+                        </a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+                        <div>
+                            <div id="container">
+                                <div class="clearfix"></div>
+                                <ul class="list">
+                                    @foreach (var item in Model)
+                                    {
+                                        <a href="/ChiTietVatPham/@item.MaVP">
+                                            <li>
+
+                                                <img src="/Content/uploads/@item.LinkHinhAnh[0]" title="" alt="" />
+                                                <section class="list-left">
+                                                    @if (item.TenVP.Length < 22)
+                                                    {
+                                                        <h5 class="title">@item.TenVP</h5>
+                                                    }
+                                                    else
+                                                    {
+                                                        string ten = item.TenVP.Substring(0, 17) + "...";
+                                                        <h5 class="title">@ten</h5>
+                                                    }
+                                                    <span class="adprice">@String.Format("{0:0,0 vnđ}", item.GiaTien)</span>
+                                                    <p class="catpath">@item.TheLoai</p>
+                                                </section>
+                                                <section class="list-right">
+                                                    <span class="date">@item.NgayDang</span>
+                                                    <span class="cityname">@item.ThanhPho</span>
+                                                </section>
+                                                <div class="clearfix"></div>
+                                            </li>
+                                        </a>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+

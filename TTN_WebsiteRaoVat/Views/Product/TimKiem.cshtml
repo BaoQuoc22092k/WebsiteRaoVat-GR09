@@ -1,0 +1,414 @@
+﻿@using TTN_WebsiteRaoVat.Common;
+@using TTN_WebsiteRaoVat.Models;
+@{
+    ViewBag.Title = "TimKiem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    VatPhamAccess vpa = new VatPhamAccess();
+    List<VatPham> LVP = vpa.LayVatPham(0,1);
+    TaiKhoanAccess tka = new TaiKhoanAccess();
+    List<DanhMuc> LDM = vpa.LayDanhMuc();
+    List<TinhThanh> dsTinhThanh = vpa.LayTinhThanh();
+    List<VatPhamMoiNhat> VPH = vpa.MatHangNoiBat();
+}
+
+@section HeadJS{
+    <script src="/Scripts/Ajax.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/Content/js/bootstrap.js"></script>
+    <script src="/Content/js/bootstrap-select.js"></script>
+    <script src="/Content/js/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var mySelect = $('#first-disabled2');
+
+            $('#special').on('click', function () {
+                mySelect.find('option:selected').prop('disabled', true);
+                mySelect.selectpicker('refresh');
+            });
+
+            $('#special2').on('click', function () {
+                mySelect.find('option:disabled').prop('disabled', false);
+                mySelect.selectpicker('refresh');
+            });
+
+            $('#basic2').selectpicker({
+                liveSearch: true,
+                maxOptions: 1
+            });
+        });
+    </script>
+    <!-- switcher-grid and list alignment -->
+    <script src="/Content/js/tabs.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var elem = $('#container ul');
+            $('#viewcontrols a').on('click', function (e) {
+                if ($(this).hasClass('gridview')) {
+                    elem.fadeOut(1000, function () {
+                        $('#container ul').removeClass('list').addClass('grid');
+                        $('#viewcontrols').removeClass('view-controls-list').addClass('view-controls-grid');
+                        $('#viewcontrols .gridview').addClass('active');
+                        $('#viewcontrols .listview').removeClass('active');
+                        elem.fadeIn(1000);
+                    });
+                }
+                else if ($(this).hasClass('listview')) {
+                    elem.fadeOut(1000, function () {
+                        $('#container ul').removeClass('grid').addClass('list');
+                        $('#viewcontrols').removeClass('view-controls-grid').addClass('view-controls-list');
+                        $('#viewcontrols .gridview').removeClass('active');
+                        $('#viewcontrols .listview').addClass('active');
+                        elem.fadeIn(1000);
+                    });
+                }
+            });
+        });
+    </script>
+    <!-- //switcher-grid and list alignment -->
+}
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs">
+            <a href="/Home"><i class="fa fa-home home_1"></i></a> /
+            <a href="/TatCaDanhMuc">Tất cả danh mục</a>
+        </span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- Products -->
+<div class="total-ads main-grid-border">
+    <div class="container">
+        <div class="select-box">
+            <h3 class="TieuDe">Happy Shopping tại TH - Market</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="all-categories">
+            <h3> Chọn danh mục và tìm kiếm lựa chọn hoàn hảo</h3>
+            <ul class="all-cat-list">
+                @foreach (DanhMuc a in LDM)
+                {
+                    <li><a class="DanhMuc" href="#@a.MaDanhMuc" data-id="@a.MaDanhMuc"> @a.TenDanhMuc </a></li>
+                }
+                <li><a class="DanhMuc TatCa" href="#0" data-id="@ViewBag.MaDM"> Tất cả danh mục<span class="num-of-ads">(@LVP.Count)</span></a></li>
+            </ul>
+        </div>
+        <div class="ads-grid">
+            <div class="side-bar col-md-3">
+                <div class="search-hotel">
+                    <h3 class="agileits-sear-head">Tìm kiếm</h3>
+                    
+                        <input type="text" id="strTim" placeholder="Tên vật phẩm" required="">
+                        <a id="TimKiemVP" style="cursor: pointer;" data-id="@ViewBag.MaDM"><i class="fa fa-search"></i></a>
+                    
+                </div>
+                <div class="range">
+                    <h3 class="agileits-sear-head">Tầm giá</h3>
+                    <ul class="dropdown-menu6">
+                        <li>
+                            <div id="slider-range"></div>
+                            <input type="text" id="amount" style="border: 0; color: #ffffff; font-weight: normal;" />
+                        </li>
+                    </ul>
+                    <!---->
+
+                    <script type='text/javascript'>
+                        $(document).ready(function () {
+                            $(window).load(function () {
+                                $("#slider-range").slider({
+                                    range: true,
+                                    min: 0,
+                                    max: 1500,
+                                    values: [0, 1500],
+                                    slide: function (event, ui) {
+                                        $("#amount").val(ui.values[0] + " Triệu" + " - " + ui.values[1] + " Triệu");
+                                        tieuchi = $('#TieuChi').val();
+                                        madm = $('#SapXep').data('madm');
+                                        $.ajax({
+                                            async: true,
+                                            type: "POST",
+                                            url: "/Product/LocTheoGia",
+                                            data: { MaDM: 0, min: ui.values[0], max: ui.values[1], tieuchi: tieuchi },
+                                            success: function (response) {
+                                                $("#DanhSachVatPham").html(response);
+                                            }
+                                        });
+                                    }
+                                });
+                                $("#amount").val($("#slider-range").slider("values", 0) + " Triệu" + " - " + $("#slider-range").slider("values", 1) + " Triệu +");
+                            });
+                        });
+                    </script>
+
+                </div>
+                <div class="w3ls-featured-ads">
+                    <h2 class="sear-head fer">Mặt hàng nổi bật</h2>
+                    @foreach (var i in VPH)
+                    {
+                        <div class="w3l-featured-ad">
+                            <a href="/ChiTietVatPham/@i.MaVP">
+                                <div class="w3-featured-ad-left">
+                                    <img class="AnhVPHot" src="~/Content/uploads/@i.LinkAnh" alt="" />
+                                </div>
+                                <div class="w3-featured-ad-right">
+                                    <h4 title="@i.TenVP">@vpa.RutGonTen(i.TenVP)</h4>
+                                    <p>@String.Format("{0:0,0 vnđ}", i.GiaTien)</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </a>
+                        </div>
+                    }
+
+
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div id="DanhSachVatPham">
+                <!-- Products -->
+                <div class="agileinfo-ads-display col-md-9">
+                    <div class="wrapper">
+                        <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul id="myTab" class="nav nav-tabs nav-tabs-responsive" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                        <span class="text">Tất cả</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="next">
+                                    <a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">
+                                        <span class="text">Cá nhân</span>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#samsa" role="tab" id="samsa-tab" data-toggle="tab" aria-controls="samsa">
+                                        <span class="text">Bán chuyên</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+                                    <div>
+                                        <div id="container">
+                                            <div class="view-controls-list" id="viewcontrols">
+                                                <label>Chế độ xem:</label>
+                                                <a class="gridview"><i class="glyphicon glyphicon-th"></i></a>
+                                                <a class="listview active"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            </div>
+                                            <div class="sort">
+                                                <div class="sort-by">
+
+                                                    <label>Sắp xếp theo : </label>
+                                                    <select id="TieuChi">
+                                                        <option value="0">Mới nhất</option>
+                                                        <option value="1">Giá tăng dần</option>
+                                                        <option value="2">Giá giảm dần</option>
+                                                    </select>
+                                                </div>
+
+                                                <a href="#@ViewBag.MaDM" id="SapXep" data-madm="@ViewBag.MaDM">Áp dụng</a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <ul class="list">
+                                                @foreach (var item in Model)
+                                                {
+                                                    <a href="/ChiTietVatPham/@item.MaVP">
+                                                        <li>
+
+                                                            <img src="/Content/uploads/@item.LinkHinhAnh[0]" title="" alt="" />
+                                                            <section class="list-left">
+                                                                @if (item.TenVP.Length < 22)
+                                                                {
+                                                                    <h5 class="title">@item.TenVP</h5>
+                                                                }
+                                                                else
+                                                                {
+                                                                    string ten = item.TenVP.Substring(0, 17) + "...";
+                                                                    <h5 class="title">@ten</h5>
+                                                                }
+                                                                <span class="adprice">@String.Format("{0:0,0 vnđ}", item.GiaTien)</span>
+                                                                <p class="catpath">@item.TheLoai</p>
+                                                            </section>
+                                                            <section class="list-right">
+                                                                <span class="date">@item.NgayDang</span>
+                                                                <span class="cityname">@item.ThanhPho</span>
+                                                            </section>
+                                                            <div class="clearfix"></div>
+                                                        </li>
+                                                    </a>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+                                    <div>
+                                        <div id="container">
+                                            <div class="view-controls-list" id="viewcontrols">
+                                                <label>Chế độ xem :</label>
+                                                <a class="gridview"><i class="glyphicon glyphicon-th"></i></a>
+                                                <a class="listview active"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            </div>
+                                            <div class="sort">
+                                                <div class="sort-by">
+
+                                                    <label>Sắp xếp theo : </label>
+                                                    <select id="TieuChi">
+                                                        <option value="0">Mới nhất</option>
+                                                        <option value="1">Giá &uarr;</option>
+                                                        <option value="2">Giá &darr;</option>
+                                                    </select>
+                                                </div>
+
+                                                <a href="#@ViewBag.MaDM" id="SapXep" data-madm="@ViewBag.MaDM">Áp dụng</a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <ul class="list">
+                                                @foreach (var item in Model)
+                                                {
+                                                    if (item.LoaiTK == 0)
+                                                    {
+                                                        <a href="/ChiTietVatPham/@item.MaVP">
+                                                            <li>
+
+                                                                <img src="/Content/uploads/@item.LinkHinhAnh[0]" title="" alt="" />
+                                                                <section class="list-left">
+                                                                    @if (item.TenVP.Length < 22)
+                                                                    {
+                                                                        <h5 class="title">@item.TenVP</h5>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        string ten = item.TenVP.Substring(0, 17) + "...";
+                                                                        <h5 class="title">@ten</h5>
+                                                                    }
+                                                                    <span class="adprice">@String.Format("{0:0,0 vnđ}", item.GiaTien)</span>
+                                                                    <p class="catpath">@item.TheLoai</p>
+                                                                </section>
+                                                                <section class="list-right">
+                                                                    <span class="date">@item.NgayDang</span>
+                                                                    <span class="cityname">@item.ThanhPho</span>
+                                                                </section>
+                                                                <div class="clearfix"></div>
+                                                            </li>
+                                                        </a>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="samsa" aria-labelledby="samsa-tab">
+                                    <div>
+                                        <div id="container">
+                                            <div class="view-controls-list" id="viewcontrols">
+                                                <label>Chế độ xem :</label>
+                                                <a class="gridview"><i class="glyphicon glyphicon-th"></i></a>
+                                                <a class="listview active"><i class="glyphicon glyphicon-th-list"></i></a>
+                                            </div>
+                                            <div class="sort">
+                                                <div class="sort-by">
+
+                                                    <label>Sắp xếp theo : </label>
+                                                    <select id="TieuChi">
+                                                        <option value="0">Mới nhất</option>
+                                                        <option value="1">Giá &uarr;</option>
+                                                        <option value="2">Giá &darr;</option>
+                                                    </select>
+                                                </div>
+
+                                                <a href="#@ViewBag.MaDM" id="SapXep" data-madm="@ViewBag.MaDM">Áp dụng</a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <ul class="list">
+                                                @foreach (var item in Model)
+                                                {
+                                                    if (item.LoaiTK == 1)
+                                                    {
+                                                        <a href="/ChiTietVatPham/@item.MaVP">
+                                                            <li>
+
+                                                                <img src="/Content/uploads/@item.LinkHinhAnh[0]" title="" alt="" />
+                                                                <section class="list-left">
+                                                                    @if (item.TenVP.Length < 22)
+                                                                    {
+                                                                        <h5 class="title">@item.TenVP</h5>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        string ten = item.TenVP.Substring(0, 17) + "...";
+                                                                        <h5 class="title">@ten</h5>
+                                                                    }
+                                                                    <span class="adprice">@String.Format("{0:0,0 vnđ}", item.GiaTien)</span>
+                                                                    <p class="catpath">@item.TheLoai</p>
+                                                                </section>
+                                                                <section class="list-right">
+                                                                    <span class="date">@item.NgayDang</span>
+                                                                    <span class="cityname">@item.ThanhPho</span>
+                                                                </section>
+                                                                <div class="clearfix"></div>
+                                                            </li>
+                                                        </a>
+                                                    }
+
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="pagination pagination-sm">
+                                    @if (ViewBag.Trang > 0)
+                                    {
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = ViewBag.Trang - 1 })">Trước</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 1})">1</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 2})">2</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 3})">3</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 4})">4</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = ViewBag.Trang + 1})">Sau</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 1})">1</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 2})">2</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 3})">3</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = 4})">4</a></li>
+                                        <li><a href="@Url.Action("Index", "Product", new { MaDM = ViewBag.MaDM, Trang = ViewBag.Trang + 1})">Sau</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation-JavaScript -->
+<script src="/Content/js/classie.js"></script>
+<script src="/Content/js/main.js"></script>
+<!-- //Navigation-JavaScript -->
+<!-- here stars scrolling icon -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $().UItoTop({ easingType: 'easeOutQuart' });
+
+    });
+</script>
+<!-- start-smoth-scrolling -->
+<script type="text/javascript" src="/Content/js/move-top.js"></script>
+<script type="text/javascript" src="/Content/js/easing.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+        });
+    });
+</script>
+<!-- start-smoth-scrolling -->
+<!-- //here ends scrolling icon -->
+<script type="text/javascript" src="/Content/js/btt.js"></script>

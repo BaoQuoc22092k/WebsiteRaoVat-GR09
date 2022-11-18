@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    VatPhamAccess vp = new VatPhamAccess();
+    List<VatPhamAdmin> vpam = vp.DanhSachVP();
+}
+@using TTN_WebsiteRaoVat.Models;
+
+<script src="~/Content/js/jquery-1.10.2.js"></script>
+<script src="~/Areas/Admin/Contents/js/AjaxAdmin.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="title-5 m-b-35">Tất cả vật phẩm</h3>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                <thead>
+                    <tr>
+                        <th>Tên Người Bán</th>
+                        <th>Tên Vật Phẩm</th>
+                        <th>Mô Tả</th>
+                        <th>Tình Trạng</th>
+                        <th>Giá Tiền</th>
+                        <th>Tên Thể Loại</th>
+                        <th>Hình Ảnh</th>
+                        <th>Ngày Đăng</th>
+                        <th>Hành Động</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in vpam)
+                    {
+
+                        <tr class="tr-shadow">
+                            <td class="desc" title="@i.TenNguoiBan"><p>@vp.RutGonTen(i.TenNguoiBan)</p></td>
+                            <td title="@i.TenVatPham">@vp.RutGonTen(i.TenVatPham)</td>
+                            <td>
+                                <span class="status--process" title="@i.Mota">@vp.RutGonTen(i.Mota)</span>
+                            </td>
+                            <td title="@i.TinhTrang">@vp.RutGonTen(i.TinhTrang)</td>
+                            <td>@String.Format("{0:0,0 vnđ}", i.GiaTien)</td>
+                            <td title="@i.TenTL">@vp.RutGonTen(i.TenTL)</td>
+                            <td><img class="AnhVP" src="~/Content/uploads/@i.LinkHinhAnh" /></td>
+                            <td>@i.NgayDang</td>
+
+                            <td>
+                                <div class="table-data-feature">
+
+                                    <button data-id="@i.MaVP" class="Khoa item" data-toggle="tooltip" data-placement="top" title="Lock">
+                                        <i class="fas fa-lock"></i>
+                                    </button>
+                                    <button data-id="@i.MaVP" class="Xoa item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <i class="zmdi zmdi-delete"></i>
+                                    </button>
+                                    <a href="/ChiTietVatPham/@i.MaVP" target="_blank" class="item" data-toggle="tooltip" data-placement="top" title="Detail">
+                                        <i class="zmdi zmdi-more"></i>
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                    <tr class="spacer"></tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+

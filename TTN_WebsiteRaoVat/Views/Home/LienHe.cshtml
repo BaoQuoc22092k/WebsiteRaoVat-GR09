@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "LienHe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs"><a href="index.html"><i class="fa fa-home home_1"></i></a> / <span>Contact</span></span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- contact -->
+<div class="contact main-grid-border">
+    <div class="container">
+        <h2 class="w3-head text-center">Contact Us</h2>
+        <section id="hire">
+            <form id="filldetails" action="#" method="post">
+                <div class="field name-box">
+                    <input type="text" name="name" placeholder="Bạn là ai?" />
+                    <label>Họ tên của bạn</label>
+                    <span class="ss-icon">check</span>
+                </div>
+
+                <div class="field email-box">
+                    <input type="text" name="email" placeholder="example@email.com" />
+                    <label>Email</label>
+                    <span class="ss-icon">check</span>
+                </div>
+
+                <div class="field phonenum-box">
+                    <input type="text" name="tel" placeholder="Số điện thoại" />
+                    <label>SĐT</label>
+                    <span class="ss-icon">check</span>
+                </div>
+
+                <div class="field msg-box">
+                    <textarea id="msg" rows="4" placeholder="Nhập thông điệp của bạn tại đây..."></textarea>
+                    <label>Tin nhắn</label>
+                    <span class="ss-icon">check</span>
+                </div>
+
+
+            </form>
+            <div class="upload">
+                <h3 class="tlt">Đính kèm:</h3>
+                <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+                    <div id="drop">
+                        <a>Chọn file</a>
+                        <input type="file" name="upl" multiple />
+                    </div>
+
+                    <ul class="show"></ul>
+                </form>
+                <div class="clear"></div>
+                <form class="submit">
+                    <input class="button" type="submit" value="Gửi" />
+                </form>
+
+                <!-- JavaScript -->
+                <script src="js/jquery.knob.js"></script>
+
+                <!-- jQuery File Upload -->
+                <script src="js/jquery.ui.widget.js"></script>
+                <script src="js/jquery.fileupload.js"></script>
+
+                <!-- Our main JS file -->
+                <script src="js/script.js"></script>
+            </div>
+        </section>
+        <script>
+				  $('textarea').blur(function () {
+				$('#hire textarea').each(function () {
+					$this = $(this);
+					if (this.value != '') {
+						$this.addClass('focused');
+						$('textarea + label + span').css({ 'opacity': 1 });
+					} else {
+						$this.removeClass('focused');
+						$('textarea + label + span').css({ 'opacity': 0 });
+					}
+				});
+			});
+			$('#hire .field:first-child input').blur(function () {
+				$('#hire .field:first-child input').each(function () {
+					$this = $(this);
+					if (this.value != '') {
+						$this.addClass('focused');
+						$('.field:first-child input + label + span').css({ 'opacity': 1 });
+					} else {
+						$this.removeClass('focused');
+						$('.field:first-child input + label + span').css({ 'opacity': 0 });
+					}
+				});
+			});
+			$('#hire .field:nth-child(2) input').blur(function () {
+				$('#hire .field:nth-child(2) input').each(function () {
+					$this = $(this);
+					if (this.value != '') {
+						$this.addClass('focused');
+						$('.field:nth-child(2) input + label + span').css({ 'opacity': 1 });
+					} else {
+						$this.removeClass('focused');
+						$('.field:nth-child(2) input + label + span').css({ 'opacity': 0 });
+					}
+				});
+			});
+			$('#hire .field:nth-child(3) input').blur(function () {
+				$('#hire .field:nth-child(3) input').each(function () {
+					$this = $(this);
+					if (this.value != '') {
+						$this.addClass('focused');
+						$('.field:nth-child(3) input + label + span').css({ 'opacity': 1 });
+					} else {
+						$this.removeClass('focused');
+						$('.field:nth-child(3) input + label + span').css({ 'opacity': 0 });
+					}
+				});
+			});
+			$('#hire .field:nth-child(4) input').blur(function () {
+				$('#hire .field:nth-child(4) input').each(function () {
+					$this = $(this);
+					if (this.value != '') {
+						$this.addClass('focused');
+						$('.field:nth-child(4) input + label + span').css({ 'opacity': 1 });
+					} else {
+						$this.removeClass('focused');
+						$('.field:nth-child(4) input + label + span').css({ 'opacity': 0 });
+					}
+				});
+			});
+        </script>
+        <script>
+	  if (document.location.search.match(/type=embed/gi)) {
+		window.parent.postMessage("resize", "*");
+	  }
+        </script>
+    </div>
+    <!-- Địa chỉ -->
+    <div class="container">
+        <div class="agileits-get-us">
+            <ul>
+                <li><i class="fa fa-map-marker" aria-hidden="true"></i>234 - Hoàng Quốc Việt</li>
+                <li><i class="fa fa-phone" aria-hidden="true"></i>  +84 113</li>
+                <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> hachiko07021999@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- //address -->
+    <div class="map-w3layouts">
+        <h3>Vị trí</h3>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3131.209676393404!2d105.78441379181714!3d21.046412979633576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab2d88bb4195%3A0x3006e474cce20274!2zSOG7jWMgdmnhu4duIEvhu7kgdGh14bqtdCBRdcOibiBz4bux!5e0!3m2!1svi!2s!4v1587615852818!5m2!1svi!2s" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+</div>
+
+<!-- // contact -->

@@ -1,0 +1,63 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    TaiKhoanAccess tk = new TaiKhoanAccess();
+    List<PhanHoi> ph = tk.NhanPhanHoi();
+}
+@using TTN_WebsiteRaoVat.Models;
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="title-5 m-b-35">Danh Sách Phản Hồi</h3>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                <thead>
+                    <tr>
+                        <th>Tên tài khoản</th>
+                        <th>Tên Vật Phẩm</th>
+                        <th>Lý do</th>
+                        <th>Ghi Chú</th>
+                        <th>Hành Động</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ph)
+                    {
+
+                        <tr class="tr-shadow">
+                            <td class="desc" title="">@item.TenTK</td>
+                            <td title="">@item.TenVP</td>
+                            <td>
+                                <span class="status--process" title="">@item.LyDo</span>
+                            </td>
+                            <td title="">@item.GhiChu</td>
+                            
+                          
+
+                            <td>
+                                <div class="table-data-feature">
+
+                                    
+                                    <a href="/ChiTietVatPham/@item.MaVP" target="_blank" class="item" data-toggle="tooltip" data-placement="top" title="Detail">
+                                        <i class="zmdi zmdi-more"></i>
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                    <tr class="spacer"></tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+

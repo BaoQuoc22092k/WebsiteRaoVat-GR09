@@ -1,0 +1,217 @@
+﻿@using TTN_WebsiteRaoVat.Models;
+@using TTN_WebsiteRaoVat.Common;
+@{
+    /**/
+
+    ViewBag.Title = "TrangCaNhan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = (UserLogin)Session[TTN_WebsiteRaoVat.Common.CommonConstants.USER_SESSION];
+}
+@model TTN_WebsiteRaoVat.Models.TaiKhoan
+
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs">
+            <a href="/Home"><i class="fa fa-home home_1"></i></a> /
+            <span>Trang cá nhân</span>
+        </span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<div class="total-ads main-grid-border">
+    <div class="container">
+        <div class="VienBao col-md-6">
+            <div class="Trai">
+                <div class="client">
+                    @if (Model.AnhDaiDien == null)
+                    {
+                        <img src="/Content/images/user.jpg" alt="" />
+                    }
+                    else
+                    {
+                        <img src="/Content/images/@Model.AnhDaiDien" alt="" />
+                    }
+                </div>
+                <div class="client-info">
+                    <h3>@Model.HoTen</h3>
+                    <h4>0 Người theo dõi</h4>
+                    <h4>0 Người đang theo dõi</h4>
+                    @if (Model.LoaiTaiKhoan == 0)
+                    {
+                        <h4>Loại tài khoản: Cá nhân</h4>
+                    }
+                    else
+                    {
+                        <h4>Loại tài khoản: Bán chuyên</h4>
+                    }
+                </div>
+                @if (session != null)
+                {
+                    string sdt = session.SDT.Trim();
+                    if (sdt == ViewBag.sdt)
+                    {
+                        <a class="btnSuaThongTin" href="/ThayDoiThongTinCaNhan/@Model.SDT">Chỉnh sửa thông tin</a>
+                    }
+
+                }
+            </div>
+        </div>
+        <div class="VienBao col-md-6">
+            <div class="Trai">
+                <ul class="DSThongTin">
+                    <li><i class="fa fa-calendar" aria-hidden="true"></i>&emsp;&ensp; Ngày tham gia: @Model.NgayTao</li>
+                    <li><i class="fa fa-map" aria-hidden="true"></i>&emsp;&ensp;&nbsp; Địa chỉ: @Model.QueQuan</li>
+                    <li><i class="fa fa-envelope-o" aria-hidden="true"></i>&emsp;&ensp;Email: @Model.Email</li>
+                    <li><i class="fa fa-male" aria-hidden="true"></i>/<i class="fa fa-female" aria-hidden="true"></i>&emsp;Giới tính: @Model.GioiTinh</li>
+                    @if (Model.NgaySinh.ToString("dd/MM/yyyy") == "01/01/0001")
+                    {
+                        <li><i class="fa fa-birthday-cake" aria-hidden="true"></i>&emsp;&ensp;&nbsp; Ngày sinh: Chưa có</li>
+                    }
+                    else
+                    {
+                        <li><i class="fa fa-birthday-cake" aria-hidden="true"></i>&emsp;&ensp;&nbsp; Ngày sinh: @Model.NgaySinh.ToString("dd/MM/yyyy")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        @if (session != null)
+        {
+            string sdt = session.SDT.Trim();
+            if (sdt == ViewBag.sdt)
+            {
+                <a class="NutDSDatHang btnSuaXoa" href="@Url.Action("DanhSachDatHang", "User", new { sdt = session.SDT.Trim()})">Đơn đặt hàng</a>
+            }
+
+        }
+        
+        <div class="agileinfo-ads-display">
+            <div class="wrapper">
+                <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+                    <ul id="myTab" class="nav nav-tabs nav-tabs-responsive" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                <span class="text">Tin đang rao:</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+                            <div>
+                                <div id="container">
+                                    <div class="clearfix"></div>
+                                    <ul class="list">
+                                        @{
+                                            TaiKhoanAccess tka = new TaiKhoanAccess();
+                                            List<VatPham> temp = tka.LayVatPhamDangBan(Model.SDT);
+                                        }
+                                        @foreach (var i in temp)
+                                        {
+                                            <a href="/ChiTietVatPham/@i.MaVP">
+                                                <li>
+                                                    <img src="/Content/uploads/@i.LinkHinhAnh[0]" title="" alt="" />
+                                                    <section class="list-left">
+                                                        @if (i.TenVP.Length < 22)
+                                                        {
+                                                            <h5 class="title">@i.TenVP</h5>
+                                                        }
+                                                        else
+                                                        {
+                                                            string ten = i.TenVP.Substring(0, 17) + "...";
+                                                            <h5 class="title">@ten</h5>
+                                                        }
+                                                        <span class="adprice">@String.Format("{0:0,0 vnđ}", i.GiaTien)</span>
+                                                        <p class="catpath">@i.TheLoai</p>
+                                                    </section>
+                                                    @if (session != null)
+                                                    {
+                                                        string sdt = session.SDT.Trim();
+                                                        if (sdt == ViewBag.sdt)
+                                                        {
+                                                            <section class="list-right">
+                                                                @if (i.NgungBan == 1)
+                                                                {
+                                                                    <a class="TiepTucBan btnSuaXoa" data-id="@i.MaVP" href="#"><i class="fa fa-unlock" aria-hidden="true"></i> Tiếp tục bán</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="NgungBan btnSuaXoa" data-id="@i.MaVP" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Ngừng bán</a>
+                                                                }
+
+                                                                <a class="NutXoa btnSuaXoa" data-id="@i.MaVP" href="#"><i class="fa fa-remove" aria-hidden="true"></i>  Xóa</a>
+                                                            </section>
+                                                        }
+
+                                                    }
+
+
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </a>
+                                        }
+                                        @if (temp.Count == 0)
+                                        {
+                                            <h3 class="ThongBaoKhiKhongCoSanPham">Bạn chưa đăng mặt hàng nào cả <i class="fa fa-frown-o" aria-hidden="true"></i> </h3>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".NutXoa").click(function () {
+            MaVP = $(this).data('id');
+            XoaVatPham(MaVP);
+        })
+        $(".NgungBan").click(function () {
+            MaVP = $(this).data('id');
+            NgungBan(MaVP);
+        })
+        $(".TiepTucBan").click(function () {
+            MaVP = $(this).data('id');
+            TiepTucBan(MaVP);
+        })
+    });
+    function XoaVatPham(MaVP) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/XuLyAdmin/XoaVatPham",
+            data: { MaVP: MaVP },
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+    function NgungBan(MaVP) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/User/NgungBan",
+            data: { MaVP: MaVP },
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+    function TiepTucBan(MaVP) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/User/TiepTucBan",
+            data: { MaVP: MaVP },
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+
+</script>
+

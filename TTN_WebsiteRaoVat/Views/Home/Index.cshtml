@@ -1,0 +1,216 @@
+﻿@using TTN_WebsiteRaoVat.Models;
+@{    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    VatPhamAccess vpa = new VatPhamAccess();
+    List<DanhMuc> LDM = vpa.LayDanhMuc();
+    List<VatPhamMoiNhat> VPM = vpa.LayVatPhamMoiNhat();
+}
+
+<!-- Slider -->
+<div class="slider">
+    <ul class="rslides" id="slider">
+        <li>
+            <div class="w3ls-slide-text">
+                <h3>Bán gì cũng mua, mua gì cũng bán</h3>
+                <a href="@Url.Action("Index", "Product", new { MaDM = 0, Trang = 1})" class="w3layouts-explore-all">Tất cả các danh mục</a>
+            </div>
+        </li>
+        <li>
+            <div class="w3ls-slide-text">
+                <h3>Các đơn hàng tốt nhất</h3>
+                <a href="@Url.Action("Index", "Product", new { MaDM = 0, Trang = 1})" class="w3layouts-explore">Khám phá</a>
+            </div>
+        </li>
+        <li>
+            <div class="w3ls-slide-text">
+                <h3>Ngôi nhà trong mơ</h3>
+                <a href="@Url.Action("Index", "Product", new { MaDM = 0, Trang = 1})" class="w3layouts-explore">Khám phá</a>
+            </div>
+        </li>
+        <li>
+            <div class="w3ls-slide-text">
+                <h3>Những chiếc xe đình đám nhất mọi thời đại</h3>
+                <a href="@Url.Action("Index", "Product", new { MaDM = 0, Trang = 1})" class="w3layouts-explore">Khám phá</a>
+            </div>
+        </li>
+        <li>
+            <div class="w3ls-slide-text">
+                <h3>Tìm một công việc ưng ý</h3>
+                <a href="@Url.Action("Index", "Product", new { MaDM = 0, Trang = 1})" class="w3layouts-explore">Tìm việc</a>
+            </div>
+        </li>
+    </ul>
+</div>
+<!-- //Slider -->
+<!-- content-starts-here -->
+<div class="main-content">
+    <div class="w3-categories">
+        <h3>Danh Mục</h3>
+        <div class="container">
+            @foreach (DanhMuc a in LDM)
+            {
+                string css = "focus-grid w3layouts-boder" + a.MaDanhMuc.ToString();
+                <div class="col-md-3">
+                    <div class="@css">
+                        <a class="btn-8" href="@Url.Action("Index", "Product", new { MaDM = a.MaDanhMuc, Trang = 1})">
+                            <div class="focus-border">
+                                <div class="focus-layout">
+                                    <div class="focus-image"><i class="@a.Icon"></i></div>
+                                    <h4 class="clrchg">@a.TenDanhMuc</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- most-popular-ads -->
+
+    <div class="w3l-popular-ads">
+        <h3>Chủ đề phổ biến</h3>
+        <div class="w3l-popular-ads-info">
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad1.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 10, Trang = 1})">Xe lướt</a></h4>
+                    <p>Xe sang đã qua sử dụng</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 10, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad2.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 1, Trang = 1})">Căn hộ hạ giá</a></h4>
+                    <p>Viết cái gì giới thiệu ở đây</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 1, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad3.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 11, Trang = 1})">Việc làm parttime</a></h4>
+                    <p>Viết cái gì giới thiệu ở đây</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 11, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad4.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 2, Trang = 1})">Linh kiện điện tử</a></h4>
+                    <p>Viết cái gì giới thiệu ở đây</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 2, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad5.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 3, Trang = 1})">Thiết bị gia dụng</a></h4>
+                    <p>Viết cái gì giới thiệu ở đây</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 3, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="col-md-4 w3ls-portfolio-left">
+                <div class="portfolio-img event-img">
+                    <img src="/Content/images/ad6.jpg" class="img-responsive" alt="" />
+                    <div class="over-image"></div>
+                </div>
+                <div class="portfolio-description">
+                    <h4><a href="@Url.Action("Index", "Product", new { MaDM = 8, Trang = 1})">Quần áo</a></h4>
+                    <p>Viết cái gì giới thiệu ở đây</p>
+                    <a href="@Url.Action("Index", "Product", new { MaDM = 8, Trang = 1})">
+                        <span>Khám phá</span>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!-- most-popular-ads -->
+    <div class="trending-ads">
+        <div class="container">
+            <!-- slider -->
+            <div class="agile-trend-ads">
+                <h2>Mặt hàng mới nhất</h2>
+                <ul id="flexiselDemo3">
+                    @{
+                        int j = 0;
+                        for (int i = 0; i < VPM.Count / 4; i++)
+                        {
+                            <li>
+                                @for (int k = 0; k < 4; k++)
+                                {
+                                    <div class="col-md-3 biseller-column">
+                                        <a href="/ChiTietVatPham/@VPM[j].MaVP">
+                                            <img class="AnhMoiNhat" src="~/Content/uploads/@VPM[j].LinkAnh" alt="" />
+                                            <span class="price">@String.Format("{0:0,0 vnđ}", VPM[j].GiaTien)</span>
+                                        </a>
+                                        <div class="w3-ad-info">
+                                            <h5 title="@VPM[j].TenVP">@vpa.RutGonTen(VPM[j].TenVP)</h5>
+                                            <span>@VPM[j].NgayDang</span>
+                                        </div>
+                                    </div>
+                                    j++;
+                                }
+                            </li>
+                        }
+                    }                    
+                </ul>
+            </div>
+        </div>
+        <!-- //slider -->
+    </div>
+    <!--partners-->
+    <div class="w3layouts-partners">
+        <h3>Đối tác liên kết</h3>
+        <div class="container">
+            <ul>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-1.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-2.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-3.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-4.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-5.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-6.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-7.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-8.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-9.png" alt=""></a></li>
+                <li><a href="#"><img class="img-responsive" src="/Content/images/p-10.png" alt=""></a></li>
+            </ul>
+        </div>
+    </div>
+    <!--//partners-->
+</div>
+<!--end-->

@@ -1,0 +1,43 @@
+﻿@using TTN_WebsiteRaoVat.Models;
+@{
+    ViewBag.Title = "DanhSachDatHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    VatPhamAccess vpa = new VatPhamAccess();
+}
+@model List<TTN_WebsiteRaoVat.Models.ThongTinDatHang>
+<div class="KhoangCach"></div>
+<div class="container">
+    <h2>Đơn đặt hàng của bạn</h2>
+    <p>Quý khách vui lòng chủ động liên hệ với những người mua qua các thông tin bên dưới:</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Vật phẩm</th>
+                <th>SĐT</th>
+                <th>Họ Tên</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+                <th>Ghi chú</th>
+                <th>Thời gian</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model)
+            {
+                <tr>
+                    <td><a href="/ChiTietVatPham/@i.MaVP" title="@i.TenVP">@vpa.RutGonTen(i.TenVP)</a></td>
+                    <td><a href="/TrangCaNhan/@i.SDT">@i.SDT</a></td>
+                    <td>@i.HoTen</td>
+                    <td>@i.Email</td>
+                    <td title="@i.DiaChi">@vpa.RutGonTen(i.DiaChi)</td>
+                    <td title="@i.GhiChu">@vpa.RutGonTen(i.GhiChu)</td>
+                    <td title="@i.ThoiGian.ToString("dd/MM/yyyy HH:mm:ss")">@i.ThoiGian.ToString("dd/MM/yyyy")</td>
+                    <td><a class="btnXoaDH" data-id="@i.MaVP" data-sdt="@i.SDT" href="#">Xóa</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="~/Scripts/Ajax.js"></script>
+

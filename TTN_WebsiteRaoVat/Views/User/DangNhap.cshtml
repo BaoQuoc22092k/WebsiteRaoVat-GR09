@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- sign in form -->
+<section>
+    <div id="agileits-sign-in-page" class="sign-in-wrapper">
+        <div class="agileinfo_signin">
+            <h3>Đăng nhập</h3>
+            @using (Html.BeginForm("DangNhap", "User"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+                <input type="text" name="SDT" placeholder="Số điện thoại" required="">
+                <input type="password" name="MatKhau" placeholder="Mật khẩu" required="">
+                <input type="submit" name="btnDangNhap" value="Đăng nhập">
+            }
+            <div class="forgot-grid">
+                <label class="checkbox"><input type="checkbox" name="checkbox">Ghi nhớ đăng nhập</label>
+                <div class="forgot">
+                    <a href="#" data-toggle="modal" data-target="#myModal2">Quên mật khẩu?</a>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal2" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h3 class="w3ls-password">Lấy mật khẩu</h3>
+                                    <p class="get-pw">Nhập địa chỉ email của bạn dưới đây và chúng tôi sẽ gửi cho bạn một email với hướng dẫn.</p>
+                                    <form action="#" method="post">
+                                        <input type="text" class="user" name="email" placeholder="Email" required="">
+                                        <input type="submit" value="Gửi Mail cho tôi">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+
+            <h6> Bạn là người mới? <a href="/DangKy">Tạo tài khoản.</a> </h6>
+        </div>
+    </div>
+</section>
+<!-- //sign in form -->

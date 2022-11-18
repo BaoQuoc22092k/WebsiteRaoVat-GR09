@@ -1,0 +1,178 @@
+﻿@model TTN_WebsiteRaoVat.Models.VatPham
+@using TTN_WebsiteRaoVat.Common;
+@using TTN_WebsiteRaoVat.Models;
+@{
+    ViewBag.Title = "ChiTietVatPham";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = (UserLogin)Session[TTN_WebsiteRaoVat.Common.CommonConstants.USER_SESSION];
+    string sdt;
+    VatPhamAccess vpa = new VatPhamAccess();
+
+}
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v7.0" nonce="TBKvIi2l"></script>
+<!-- breadcrumbs -->
+<div class="w3layouts-breadcrumbs text-center">
+    <div class="container">
+        <span class="agile-breadcrumbs">
+            <a href="/Home"><i class="fa fa-home home_1"></i></a> /
+            <a href="/TatCaDanhMuc/@Model.MaDM">@Model.TheLoai</a> /
+            <span>@Model.TenVP</span>
+        </span>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- pupup đặt hàng -->
+
+
+<div class="LamMo"></div>
+<!-- //pupup đặt hàng -->
+<!--single-page-->
+<div class="single-page main-grid-border">
+    <div class="container">
+        <div class="product-desc">
+            <div class="col-md-7 product-view">
+                <h2>@Model.TenVP</h2>
+                
+                <p> <i class="glyphicon glyphicon-map-marker"></i><a href="#">@Model.DiaDiem</a>, <a href="#">@Model.ThanhPho</a> | @Model.NgayDang</p>
+                <div class="flexslider">
+                    <ul class="slides">
+                        @foreach (string link in Model.LinkHinhAnh)
+                        {
+                            <li data-thumb="/Content/uploads/@link">
+                                <img src="/Content/uploads/@link" />
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <!-- FlexSlider -->
+                <script defer src="/Content/js/jquery.flexslider.js"></script>
+
+                <script>
+                    // Can also be used with $(document).ready()
+                    $(window).load(function () {
+                        $('.flexslider').flexslider({
+                            animation: "slide",
+                            controlNav: "thumbnails"
+                        });
+                    });
+                </script>
+                <!-- //FlexSlider -->
+
+                <div class="product-details">
+                    <div class="btn-Thich BaoXau">Báo xấu <i class="fa fa-flag"></i></div>
+
+
+                    @if (session == null)
+                    {
+                        sdt = "";
+                    }
+                    else
+                    {
+                        sdt = session.SDT;
+                    <div class="agileinfo_signin ThongTinMuaHang">
+
+                        @using (Html.BeginForm("DatMua", "Product"))
+                        {
+                            <h3>Thông tin mua hàng</h3>
+                            <input type="hidden" name="SDT" value="@sdt" />
+                            <input type="hidden" name="SDTNB" value="@Model.SDT" />
+                            <input type="hidden" name="MaVP" value="@Model.MaVP" />
+                            <input type="text" name="TenNM" placeholder="Tên bạn" required="">
+                            <input type="email" name="Email" placeholder="Email" required="">
+                            <input type="text" name="DiaChi" placeholder="Địa chỉ" required="">
+                            <input type="text" name="GhiChu" placeholder="Ghi chú" required="">
+                            <input type="submit" value="Đặt mua">
+                        }
+                    </div>
+
+                        <div class="agileinfo_signin FormBaoXau">
+                            @using (Html.BeginForm("BaoXau", "Product"))
+                            {
+                                <h3>Báo cáo sản phẩm</h3>
+                                <input type="hidden" name="SDT" value="@sdt" />
+                                <input type="hidden" name="MaVP" value="@Model.MaVP" />
+                                <input type="text" name="LyDo" placeholder="Lý do" required="">
+                                <textarea class="GhiThem" placeholder="Ghi chú thêm" name="GhiChu"></textarea>
+                                <input type="submit" value="Báo cáo">
+                            }
+                        </div>
+
+                    }
+                    
+                    <div class="fb-share-button" data-href="/ChiTietVatPham/@Model.MaVP" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Chia sẻ</a></div>
+                    @if (vpa.DaThich(sdt, Model.MaVP))
+                    {
+                        <div id="btnThich" class="btn-Thich Thich DaThich" data-id="@Model.MaVP.ToString()" data-sdt="@sdt">Thích  <i class="fa fa-heart"></i></div>
+                    }
+                    else
+                    {
+                        <div id="btnThich" class="btn-Thich Thich" data-id="@Model.MaVP.ToString()" data-sdt="@sdt">Thích  <i class="fa fa-heart"></i></div>
+                    }
+
+                    <h4><span class="w3layouts-agileinfo">Lượt thích</span>: <strong id="LuotThich">@Model.LuotThich</strong></h4>
+                    <h4>
+                        <span class="w3layouts-agileinfo">Mô tả:</span><p>
+                            @Model.MoTa
+                        </p><div class="clearfix"></div>
+                    </h4>
+
+                </div>
+            </div>
+            <div class="col-md-5 product-details-grid">
+                <div class="item-price">
+                    <div class="product-price">
+                        <p class="p-price">Giá bán:</p>
+                        <h3 class="rate">@String.Format("{0:0,0 vnđ}", Model.GiaTien)</h3>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="condition">
+                        <p class="p-price">Đánh giá:</p>
+                        @for (int i = 0; i < Model.ChatLuong; i++)
+                        {
+                            <i class="fa fa-star"></i>
+                        }
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="condition">
+                        <p class="p-price">Tình trạng:</p>
+                        <h4>@Model.TinhTrang</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="itemtype">
+                        <p class="p-price">Người bán:</p>
+                        <a href="@Url.Action("TrangCaNhan", "User", new { sdt = @Model.SDT.Trim()})">@Model.TenNguoiBan</a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="interested text-center">
+                    <h4>Liên hệ qua số điện thoại:</h4>
+                    <p><i class="glyphicon glyphicon-earphone"></i>@Model.SDT</p>
+                </div>
+                <div class="interested text-center">
+                    <h4>Liên hệ qua mạng xã hội:</h4>
+                    <div class="w3-footer-social-icons">
+                        <ul>
+                            <li><a class="facebook" href="#"><i class="fa fa-facebook" aria-hidden="true"></i><span>Facebook</span></a></li>
+                            <li><a class="twitter" href="#"><i class="fa fa-twitter" aria-hidden="true"></i><span>Twitter</span></a></li>
+                            <li><a class="googleplus" href="#"><i class="fa fa-google-plus" aria-hidden="true"></i><span>Google+</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="interested text-center MeoMuaHang">
+                    <h4>Mẹo mua hàng an toàn</h4>
+                    <ol>
+                        <li><a href="#">Kiểm tra kỹ thông tin sản phẩm.</a></li>
+                        <li><a href="#">Tìm hiểu thông tin bán hàng từ người bán.</a></li>
+                        <li><a href="#">Chọn phương thức giao dịch an toàn.</a></li>
+                        <li><a href="#">Lưu thông tin giao dịch đầy đủ.</a></li>
+                    </ol>
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!--//single-page-->
+<script src="/Scripts/Ajax.js"></script>
